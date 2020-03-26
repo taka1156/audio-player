@@ -12,7 +12,7 @@
 
 <style>
   body {
-    background-color: rgba(235, 235, 235, 0.7);
+    background-color: rgba(169, 169, 169, 0.5);
     color: #fff;
     -webkit-app-region: drag;
     -webkit-user-select: none;
