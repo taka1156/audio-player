@@ -1,5 +1,6 @@
 <template>
   <div class="AudioMain">
+    <!--情報の表示-->
     <div class="audio-info">
         track{{ audioIndex + 1 }}/{{ playList.length }}
         <div class="music-info">
@@ -7,7 +8,7 @@
             <p>{{ formatTime }}/{{ formatEndTime }}</p>
         </div>
     </div>
-
+　　<!--トラック、再生位置、再生、停止の制御-->
     <div class="audio-controller">
       <div class="seek-bar">
         <input
@@ -30,6 +31,7 @@
         <button class="audio-btn" @click="next">&gt;</button>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -71,13 +73,12 @@ export default {
   },
   methods: {
     init () {
-      clearInterval(this.time)
-      // 曲の終わり時間の代入
-      this.formatEndTime = this.format(this.musicEndTime)
       // 初期化
-      this.status = false
+      this.stopMusic()
       this.musicTime = 0
       this.formatTime = this.format(this.musicTime)
+      // 曲の終わり時間の代入
+      this.formatEndTime = this.format(this.musicEndTime)
     },
     next () {
       this.audioIndex++
@@ -106,6 +107,7 @@ export default {
       this.status = false
       clearInterval(this.time)
     },
+    // 時間をフォーマット
     format (seconds) {
       const minute = seconds !== 0 ? Math.floor(seconds / 60) : 0
       const second = seconds !== 0 ? seconds - minute * 60 : 0
