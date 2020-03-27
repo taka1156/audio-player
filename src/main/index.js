@@ -20,7 +20,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    'width': 180,
+    'width': 200,
     'height': 180,
     'transparent': true
   })
