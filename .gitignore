@@ -8,3 +8,5 @@ npm-debug.log
 npm-debug.log.*
 thumbs.db
 !.gitkeep
+# mp3の音源は、著作権に引っかかる可能性があるので抜く
+*.mp3

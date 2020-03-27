@@ -7,7 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'landing-page',
+      name: 'audio',
       component: require('@/components/pages/Audio/AudioMain').default
     },
     {
