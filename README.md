@@ -13,7 +13,10 @@
 
 ## AudioPlayerの使い方
 
-<img width="223" alt="スクリーンショット 2020-03-27 1 04 06" src="https://user-images.githubusercontent.com/47517002/77668616-f8681580-6fc6-11ea-80db-c643081045e4.png">
+<img width="304" alt="スクリーンショット 2020-03-28 15 12 07" src="https://user-images.githubusercontent.com/47517002/77816525-a0382d00-7106-11ea-8e8a-8632eaddbca9.png">
+
+<img width="304" alt="スクリーンショット 2020-03-28 15 12 19" src="https://user-images.githubusercontent.com/47517002/77816523-9ca4a600-7106-11ea-8456-583d233884c5.png">
+
 
 |ボタン|機能                |
 |:---:|:-----------------:|
