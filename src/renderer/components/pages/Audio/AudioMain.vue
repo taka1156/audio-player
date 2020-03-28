@@ -1,30 +1,38 @@
 <template>
   <div class="AudioMain">
-    <!--ファイルの登録-->
-    <input type="file" @change="fileChange" multiple />
-    <!--情報の表示-->
-    <div v-if="!isLoaded" class="spinner"></div>
-    <div v-else>
-      <div class="info">
-        track[{{ index + 1 }}/{{ playList.length }}]
-        <div class="info__music">
-          <p class="info__music--title">{{ title }}</p>
-          <p>{{ format(seekTime) }}/{{ format(seekEndTime) }}</p>
+    <div id="drag"
+      class="audio"
+      @drop.prevent="fileChange"
+    >
+      <!--ファイルの登録-->
+      <label class="fileinput">こちらをクリックまたは、ファイルドラッグで音楽ファイルを入れてください。
+        <input type="file" class="fileinput__none" @change="fileChange" multiple />
+      </label>
+      <div v-if="!isLoaded" class="spinner"></div>
+      <div v-else>
+        <!--情報の表示-->
+        <div class="info">
+          track[{{ index + 1 }}/{{ playList.length }}]
+          <div class="info__music">
+            <p class="info__music--title">{{ title }}</p>
+            <p>{{ format(seekTime) }}/{{ format(seekEndTime) }}</p>
+          </div>
         </div>
-      </div>
-      <!--トラック、再生位置、再生、停止の制御-->
-      <div class="controller">
-        <div class="controller__seek">
-          <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
+
+        <!--トラック、再生位置、再生、停止の制御-->
+        <div class="controller">
+          <div class="controller__seek">
+            <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
+          </div>
+          <button class="controller__btn" @click="prev">&lt;</button>
+          <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
+            ▶︎
+          </button>
+          <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
+            ||
+          </button>
+          <button class="controller__btn" @click="next">&gt;</button>
         </div>
-        <button class="controller__btn" @click="prev">&lt;</button>
-        <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
-          ▶︎
-        </button>
-        <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
-          ||
-        </button>
-        <button class="controller__btn" @click="next">&gt;</button>
       </div>
     </div>
   </div>
@@ -51,6 +59,12 @@ export default {
       if (Math.floor(this.audio.currentTime) !== this.seekTime) {
         this.audio.currentTime = this.seekTime
       }
+    }
+  },
+  mounted () {
+    // デフォルトのドラッグの挙動を無効化
+    document.ondragover = document.ondrop = function (e) {
+      e.preventDefault()
     }
   },
   methods: {
@@ -135,11 +149,31 @@ export default {
 </script>
 
 <style scoped>
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  background-color: cornflowerblue;
+.audio {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 8px;
+  border: dotted 0.5px black;
 }
 
+/* ファイルの取り込み */
+.fileinput {
+  display: block;
+  margin: 5px; 
+  width: 95%;
+  border: solid 1px gray;
+  background-color: gray; 
+  font-size: 10px;
+}
+
+.fileinput__none {
+  display: none;
+}
+
+/* 待機時のスピナー表示　*/
 .spinner {
   width: 100px;
   height: 100px;
@@ -160,6 +194,7 @@ input[type='range']::-webkit-slider-thumb {
   }
 }
 
+/* 再生中の曲に関する情報　*/
 .info {
   text-align: center;
 }
@@ -170,6 +205,12 @@ input[type='range']::-webkit-slider-thumb {
 
 .info__music--title {
   word-wrap: break-word;
+}
+
+/* オーディオ プレイヤーのコントローラー　*/
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: cornflowerblue;
 }
 
 .controller,
