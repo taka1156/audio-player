@@ -6,21 +6,25 @@
     <div v-if="!isLoaded" class="spinner"></div>
     <div v-else>
       <div class="info">
-          track[{{ index + 1 }}/{{ playList.length }}]
-          <div class="info__music">
-              <p class="info__music--title">{{ title }}</p>
-              <p>{{ format(seekTime) }}/{{ format(seekEndTime) }}</p>
-          </div>
+        track[{{ index + 1 }}/{{ playList.length }}]
+        <div class="info__music">
+          <p class="info__music--title">{{ title }}</p>
+          <p>{{ format(seekTime) }}/{{ format(seekEndTime) }}</p>
+        </div>
       </div>
-  　　<!--トラック、再生位置、再生、停止の制御-->
-        <div class="controller">
-          <div class="controller__seek">
-            <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
-          </div>
-          <button class="controller__btn" @click="prev">&lt;</button>
-          <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">▶︎</button>
-          <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">||</button>
-          <button class="controller__btn" @click="next">&gt;</button>
+      <!--トラック、再生位置、再生、停止の制御-->
+      <div class="controller">
+        <div class="controller__seek">
+          <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
+        </div>
+        <button class="controller__btn" @click="prev">&lt;</button>
+        <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
+          ▶︎
+        </button>
+        <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
+          ||
+        </button>
+        <button class="controller__btn" @click="next">&gt;</button>
       </div>
     </div>
   </div>
@@ -182,7 +186,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 
 .controller__btn--play {
-  color:red;
+  color: red;
 }
 
 .controller__btn--stop {
