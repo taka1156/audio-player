@@ -1,20 +1,33 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view class="view"></router-view>
+    <nav-bar />
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'audio-player'
+import NavBar from '@/components/Nav/NavBar'
+
+export default {
+  name: 'audio-player',
+  components: {
+    'nav-bar': NavBar
   }
+}
 </script>
 
 <style>
   body {
-    background-color: rgba(169, 169, 169, 0.8);
+    background-color: rgba(255, 255, 255, 0.6);
     color: #fff;
     -webkit-app-region: drag;
     -webkit-user-select: none;
+    overflow: hidden;
   }
+
+  .view {
+    height: 88vh;
+    border: solid 0.5px rgba(0, 0, 0, 0);
+  }
+
 </style>
