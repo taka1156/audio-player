@@ -2,8 +2,8 @@
   <div class="AudoDisplay">
     <!--情報の表示-->
     <div class="info">
-      track[{{ index + 1 }}/{{ playlistLength }}]
       <div class="info__music">
+        track[{{ index + 1 }}/{{ playlistLength }}]
         <p class="info__music--title">{{ title }}</p>
         <img v-show="isLoop" src="@/assets/ui-icon/loop.svg" class="info__music--icon" />
       </div>
