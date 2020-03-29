@@ -1,37 +1,54 @@
 <template>
   <div class="AudioMain">
-    <div id="drag"
-      class="audio"
-      @drop.prevent="fileChange"
-    >
+    <div id="drag" class="audio" @drop.prevent="fileChange">
       <!--ファイルの登録-->
-      <label class="fileinput">こちらをクリックまたは、ファイルドラッグで音楽ファイルを入れてください。
+      <label class="fileinput"
+        >こちらをクリックまたは、ファイルドラッグで音楽ファイルを入れてください。
         <input type="file" class="fileinput__none" @change="fileChange" multiple />
       </label>
-      <div v-if="!isLoaded" class="spinner"></div>
-      <div v-else>
-        <!--情報の表示-->
-        <div class="info">
-          track[{{ index + 1 }}/{{ playList.length }}]
-          <div class="info__music">
-            <p class="info__music--title">{{ title }}</p>
-            <p>{{ format(seekTime) }}/{{ format(seekEndTime) }}</p>
-          </div>
+    </div>
+    <div v-if="!isLoaded" class="spinner"></div>
+    <div v-else>
+      <!--再生中の曲の情報-->
+      <audio-display />
+      <div class="controller">
+        <!--ループやシャッフルの制御-->
+        <div>
+          <button @click="loop" class="controller__btn">
+            <img src="@/assets/ui-icon/loop.svg" class="controller__btn--icon" />
+          </button>
+          <button class="controller__btn">
+            <img src="@/assets/ui-icon/shuffle.svg" class="controller__btn--icon" />
+          </button>
         </div>
-
-        <!--トラック、再生位置、再生、停止の制御-->
-        <div class="controller">
-          <div class="controller__seek">
-            <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
+        <!--再生位置-->
+        <div class="controller__seek">
+          <div class="controller__seek--info">
+            <ruby>{{ format(preSeekTime) }}</ruby>
+            <ruby>{{ format(seekEndTime) }}</ruby>
           </div>
-          <button class="controller__btn" @click="prev">&lt;</button>
-          <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
-            ▶︎
-          </button>
-          <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
-            ||
-          </button>
-          <button class="controller__btn" @click="next">&gt;</button>
+          <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
+        </div>
+        <!--トラックを戻す-->
+        <button class="controller__btn" @click="prev">
+          <img src="@/assets/ui-icon/prev.svg" class="controller__btn--track" />
+        </button>
+        <!--再生-->
+        <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
+          <img src="@/assets/ui-icon/play.svg" class="controller__btn--track" />
+        </button>
+        <!--停止-->
+        <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
+          <img src="@/assets/ui-icon/stop.svg" class="controller__btn--track" />
+        </button>
+        <!--トラックを進める-->
+        <button class="controller__btn" @click="next">
+          <img src="@/assets/ui-icon/next.svg" class="controller__btn--track" />
+        </button>
+        <!--音量調節-->
+        <div class="controller__seek">
+          <img src="@/assets/ui-icon/volume.svg" class="controller__seek--icon" />
+          <input type="range" v-model="volume" min="0" :max="1" step="0.1" />
         </div>
       </div>
     </div>
@@ -39,30 +56,54 @@
 </template>
 
 <script>
+import AudioDisplay from './parts/AudioDisplay'
+
 export default {
   name: 'AudioMain',
+  components: {
+    'audio-display': AudioDisplay
+  },
   data () {
     return {
-      index: 0, // プレイリストの添え字
-      isLoaded: false, // ファイルが登録されたか
-      isPlay: false, // 再生状態の確認
-      audio: new Audio(), // Audioインスタンス
-      title: '', // ファイル名(タイトル)
       playList: [], // 登録したファイル一覧
       seekTime: 0, // 現在のシークバーの現在位置(再生位置)
-      seekEndTime: 0 // シークバーの最大値
+      volume: 1
     }
   },
   watch: {
     seekTime () {
       // ユーザが操作した時のみ適用(再生時間の視覚表示にも使ってるためjs側からの操作を弾く必要がある)
-      if (Math.floor(this.audio.currentTime) !== this.seekTime) {
-        this.audio.currentTime = this.seekTime
+      if (this.preSeekTime !== this.seekTime) {
+        this.$store.dispatch('controlSeek', this.seekTime)
+      }
+    },
+    volume () {
+      if (this.preVolume !== this.seekTime) {
+        this.$store.dispatch('controlVolme', this.volume)
       }
     }
   },
+  computed: {
+    isLoaded () {
+      return this.$store.getters.isLoaded
+    },
+    isPlay () {
+      return this.$store.getters.isPlay
+    },
+    preSeekTime () {
+      this.seekTime = this.$store.getters.seekTime
+      return this.$store.getters.seekTime
+    },
+    seekEndTime () {
+      return this.$store.getters.seekEndTime
+    },
+    preVolume () {
+      this.volume = this.$store.getters.volume
+      return this.$store.getters.volume
+    }
+  },
   mounted () {
-    // デフォルトのドラッグの挙動を無効化
+    // デフォルトのドラッグの挙動を無効化(ファイルのプレビュー無効化)
     document.ondragover = document.ondrop = function (e) {
       e.preventDefault()
     }
@@ -74,68 +115,37 @@ export default {
         return
       }
       for (let i = 0, max = FILES.length; i < max; i++) {
-        this.read(FILES[i])
+        this.$store.dispatch('loadFile', FILES[i])
       }
       // 初回読み込みに時間がかかるため実行タイミングを少しずらす
       if (!this.isLoaded) {
         const delay = setTimeout(() => {
           this.init()
-          this.isLoaded = true
           clearTimeout(delay)
         }, 1000)
       }
     },
-    read (file) {
-      let reader = new FileReader()
-      reader.onload = () => {
-        this.playList.push({name: file.name, path: reader.result})
-      }
-      reader.readAsDataURL(file)
-    },
     init () {
       // 初期化(再生途中で次のトラックに進む可能性)
       if (this.isPlay) this.stop()
-      // シークバーの初期化
-      this.seekTime = 0
-      this.title = this.playList[this.index].name
-      // 曲のあるパスをセット(再定義をさけるためAudioは、事前に定義)
-      this.audio.src = this.playList[this.index].path
-      // 曲の終わり時間の代入
-      this.audio.addEventListener('loadedmetadata', () => {
-        this.seekEndTime = Math.floor(this.audio.duration)
-      })
+      this.$store.dispatch('init')
     },
     next () {
-      this.index++
-      if (this.index === this.playList.length) {
-        this.index = 0
-      }
+      this.$store.dispatch('next')
       this.init()
     },
     prev () {
-      this.index--
-      if (this.index === -1) {
-        this.index = this.playList.length - 1
-      }
+      this.$store.dispatch('prev')
       this.init()
     },
     start () {
-      this.isPlay = true
-      this.audio.play()
-      // 再生時間の取得
-      // 再生中
-      this.audio.addEventListener('timeupdate', () => {
-        this.seekTime = Math.floor(this.audio.currentTime)
-      })
-      // 曲の終了
-      this.audio.addEventListener('ended', () => {
-        this.audio.currentTime = 0
-        this.stop()
-      })
+      this.$store.dispatch('start')
     },
     stop () {
-      this.isPlay = false
-      this.audio.pause()
+      this.$store.dispatch('stop')
+    },
+    loop () {
+      this.$store.dispatch('loop')
     },
     format (seconds) {
       const minute = seconds !== 0 ? Math.floor(seconds / 60) : 0
@@ -154,18 +164,18 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  margin: 8px;
+  bottom: 50%;
+  margin: 8px auto;
+  width: 90%;
   border: dotted 0.5px black;
 }
 
 /* ファイルの取り込み */
 .fileinput {
   display: block;
-  margin: 5px; 
-  width: 95%;
-  border: solid 1px gray;
-  background-color: gray; 
+  margin: 8px auto;
+  width: 90%;
+  background-color: gray;
   font-size: 10px;
 }
 
@@ -177,7 +187,7 @@ export default {
 .spinner {
   width: 100px;
   height: 100px;
-  margin: 20vh auto;
+  margin: 55vh auto;
   border-radius: 100%;
   background-color: cornflowerblue;
   animation: spinner-anime 2s infinite;
@@ -194,43 +204,57 @@ export default {
   }
 }
 
-/* 再生中の曲に関する情報　*/
-.info {
+/* オーディオ プレイヤーのコントローラー　*/
+.controller {
+  text-align: center;
+  margin: 10px auto;
+  height: 130px;
+  width: 95%;
+  border: solid 1px gray;
+}
+
+.controller__seek {
   text-align: center;
 }
 
-.info__music {
-  line-height: 10px;
+.controller__seek--info {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 }
 
-.info__music--title {
-  word-wrap: break-word;
+.controller__seek--info ruby {
+  line-height: 0px;
+  font-size: 13px;
 }
 
-/* オーディオ プレイヤーのコントローラー　*/
+.controller__seek--icon {
+  width: 15px;
+  height: 15px;
+}
+
+input[type='range'] {
+  width: 70%;
+}
+
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   background-color: cornflowerblue;
 }
 
-.controller,
-.controller__seek {
-  text-align: center;
-}
-
 .controller__btn {
-  display: inline-block;
   background-color: rgba(0, 0, 0, 0);
   border: none;
-  color: ghostwhite;
-  font-size: 20px;
 }
 
-.controller__btn--play {
-  color: red;
+.controller__btn--track {
+  height: 55px;
+  width: 55px;
 }
 
-.controller__btn--stop {
-  color: dimgray;
+.controller__btn--icon {
+  height: 15px;
+  width: 15px;
 }
 </style>
