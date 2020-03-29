@@ -167,14 +167,17 @@ export default {
   bottom: 50%;
   margin: 8px auto;
   width: 90%;
-  border: dotted 0.5px black;
+  height: 170px;
+  border: solid 0.5px black;
 }
 
 /* ファイルの取り込み */
 .fileinput {
   display: block;
   margin: 8px auto;
+  height: 30px;
   width: 90%;
+
   background-color: gray;
   font-size: 10px;
 }
@@ -210,7 +213,7 @@ export default {
   margin: 10px auto;
   height: 130px;
   width: 95%;
-  border: solid 1px gray;
+  border: groove 1px black;
 }
 
 .controller__seek {

@@ -38,7 +38,7 @@ export default {
   width: 90%;
   margin: 5px auto;
   text-align: center;
-  border: solid 1px black;
+  border: dotted 1px black;
 }
 
 .info__music {
