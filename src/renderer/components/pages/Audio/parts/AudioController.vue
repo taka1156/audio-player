@@ -3,10 +3,10 @@
     <div class="controller">
       <!--ループやシャッフルの制御-->
       <button @click="loop" class="controller__btn">
-        <img src="@/assets/ui-icon/loop.svg" class="controller__btn--icon" />
+        <img src="@/assets/ui-icon/loop.svg" class="controller__icon--sm" />
       </button>
       <button class="controller__btn">
-        <img src="@/assets/ui-icon/shuffle.svg" class="controller__btn--icon" />
+        <img src="@/assets/ui-icon/shuffle.svg" class="controller__icon--sm" />
       </button>
       <!--再生位置-->
       <div class="controller__seek">
@@ -18,19 +18,19 @@
       </div>
       <!--トラックを戻す-->
       <button class="controller__btn" @click="prev">
-        <img src="@/assets/ui-icon/prev.svg" class="controller__btn--track" />
+        <img src="@/assets/ui-icon/prev.svg" class="controller__icon--lg" />
       </button>
       <!--再生-->
       <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
-        <img src="@/assets/ui-icon/play.svg" class="controller__btn--track" />
+        <img src="@/assets/ui-icon/play.svg" class="controller__icon--lg" />
       </button>
       <!--停止-->
       <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
-        <img src="@/assets/ui-icon/stop.svg" class="controller__btn--track" />
+        <img src="@/assets/ui-icon/stop.svg" class="controller__icon--lg" />
       </button>
       <!--トラックを進める-->
       <button class="controller__btn" @click="next">
-        <img src="@/assets/ui-icon/next.svg" class="controller__btn--track" />
+        <img src="@/assets/ui-icon/next.svg" class="controller__icon--lg" />
       </button>
       <!--音量調節-->
       <div class="controller__seek">
@@ -157,12 +157,12 @@ input[type='range']::-webkit-slider-thumb {
   border: none;
 }
 
-.controller__btn--track {
+.controller__icon--lg {
   height: 55px;
   width: 55px;
 }
 
-.controller__btn--icon {
+.controller__icon--sm {
   height: 15px;
   width: 15px;
 }
