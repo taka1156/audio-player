@@ -48,7 +48,7 @@
         <!--音量調節-->
         <div class="controller__seek">
           <img src="@/assets/ui-icon/volume.svg" class="controller__seek--icon" />
-          <input type="range" v-model="volume" min="0" :max="1" step="0.1" />
+          <input type="range" v-model="volume" min="0" :max="1" step="0.01" />
         </div>
       </div>
     </div>
