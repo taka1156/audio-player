@@ -5,7 +5,7 @@ const state = {
   isPlay: false, // 再生状態の確認
   isLoop: false, // ループの状態
   playList: [], // 登録したファイル一覧
-  seekTime: 0, // 現在のシークバーの現在位置(再生位置)
+  preSeekTime: 0, // 現在のシークバーの現在位置(再生位置)
   seekEndTime: 0, // シークバーの最大値
   preVolume: 1
 }
@@ -31,8 +31,8 @@ const getters = {
   title (state) {
     return state.playList[state.index].name
   },
-  seekTime (state) {
-    return Math.floor(state.seekTime)
+  preSeekTime (state) {
+    return Math.floor(state.preSeekTime)
   },
   seekEndTime (state) {
     return Math.floor(state.seekEndTime)
@@ -56,8 +56,8 @@ const mutations = {
     state.isPlay = !state.isPlay
   },
   // 現在のシーク位置
-  setSeekTime (state, seekTime) {
-    state.seekTime = seekTime
+  setPreSeekTime (state, preSeekTime) {
+    state.preSeekTime = preSeekTime
   },
   // 終わりのシーク位置
   setSeekEndTime (state, seekEndTime) {
@@ -101,7 +101,7 @@ const actions = {
   },
   init (context) {
     // シークバーの初期化
-    context.commit('setSeekTime', 0)
+    context.commit('setPreSeekTime', 0)
     // 曲のあるパスをセット(再定義をさけるためAudioは、事前に定義)
     audio.src = context.getters.playList[context.getters.index].path
     // 読み込み
@@ -122,7 +122,7 @@ const actions = {
     audio.play()
     // 再生時間の取得
     audio.addEventListener('timeupdate', () => {
-      context.commit('setSeekTime', audio.currentTime)
+      context.commit('setPreSeekTime', audio.currentTime)
     })
     // 曲の終了
     audio.addEventListener('ended', () => {
@@ -143,7 +143,7 @@ const actions = {
     audio.volume = vol
   },
   controlSeek (context, seekTime) {
-    context.commit('setSeekTime', seekTime)
+    context.commit('setPreSeekTime', seekTime)
     audio.currentTime = seekTime
   }
 }
