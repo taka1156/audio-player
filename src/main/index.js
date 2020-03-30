@@ -22,7 +22,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     'width': 280,
     'height': 380,
-    'transparent': true
+    resizable: false
   })
 
   mainWindow.loadURL(winURL)

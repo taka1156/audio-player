@@ -91,15 +91,11 @@ export default {
       return this.$store.getters.isPlay
     },
     preSeekTime () {
-      this.seekTime = this.$store.getters.seekTime
       return this.$store.getters.seekTime
     },
     seekEndTime () {
+      this.seekTime = this.$store.getters.seekTime
       return this.$store.getters.seekEndTime
-    },
-    preVolume () {
-      this.volume = this.$store.getters.volume
-      return this.$store.getters.volume
     }
   },
   mounted () {
@@ -107,6 +103,7 @@ export default {
     document.ondragover = document.ondrop = function (e) {
       e.preventDefault()
     }
+    this.volume = this.$store.getters.preVolume
   },
   methods: {
     fileChange (e) {

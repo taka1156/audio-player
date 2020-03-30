@@ -7,7 +7,7 @@ const state = {
   playList: [], // 登録したファイル一覧
   seekTime: 0, // 現在のシークバーの現在位置(再生位置)
   seekEndTime: 0, // シークバーの最大値
-  volume: 1
+  preVolume: 1
 }
 
 const getters = {
@@ -24,8 +24,8 @@ const getters = {
   isLoop (state) {
     return state.isLoop
   },
-  volume (state) {
-    return state.volume
+  preVolume (state) {
+    return state.preVolume
   },
   // 曲に関する情報
   title (state) {
@@ -86,8 +86,8 @@ const mutations = {
     state.isLoop = !state.isLoop
   },
   // ボリューム
-  setVolume (state, vol) {
-    state.volume = vol
+  setPreVolume (state, vol) {
+    state.preVolume = vol
   }
 }
 
@@ -139,7 +139,7 @@ const actions = {
     audio.loop = !audio.loop
   },
   controlVolme (context, vol) {
-    context.commit('setVolume', vol)
+    context.commit('setPreVolume', vol)
     audio.volume = vol
   },
   controlSeek (context, seekTime) {
