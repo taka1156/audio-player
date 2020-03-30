@@ -21,11 +21,11 @@
         <img src="@/assets/ui-icon/prev.svg" class="controller__icon--lg" />
       </button>
       <!--再生-->
-      <button class="controller__btn controller__btn--play" v-show="!isPlay" @click="start">
+      <button class="controller__btn" v-show="!isPlay" @click="start">
         <img src="@/assets/ui-icon/play.svg" class="controller__icon--lg" />
       </button>
       <!--停止-->
-      <button class="controller__btn controller__btn--stop" v-show="isPlay" @click="stop">
+      <button class="controller__btn" v-show="isPlay" @click="stop">
         <img src="@/assets/ui-icon/stop.svg" class="controller__icon--lg" />
       </button>
       <!--トラックを進める-->
