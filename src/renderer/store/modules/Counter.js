@@ -11,7 +11,7 @@ const state = {
 }
 
 const getters = {
-  isLoaded () {
+  isLoaded (state) {
     return state.playList.length !== 0
   },
   playList (state) {
