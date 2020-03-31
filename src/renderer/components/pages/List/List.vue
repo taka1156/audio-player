@@ -13,22 +13,18 @@
 </template>
 
 <script>
+import audioPlayer from '@/components/js/AudioPlayer.js'
+
 export default {
   name: 'Favo',
   computed: {
-    isPlay () {
-      return this.$store.getters.isPlay
-    },
     playList () {
       return this.$store.getters.playList
     }
   },
   methods: {
     changeIndex (index) {
-      if (this.isPlay) {
-        this.$store.dispatch('stop')
-      }
-      this.$store.dispatch('changeIndex', index)
+      audioPlayer.changeIndex(index)
       this.$router.push('./music')
     }
   }
