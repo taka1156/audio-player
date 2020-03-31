@@ -16,13 +16,14 @@ export default {
 <style scoped>
 .center {
   margin: 0 auto;
-  height: 95%;
-  border: solid 1px black;
+  height: 87vh;
+  width: 95%;
+  border: solid 1px white;
 }
 
 .border {
   width: 100%;
-  border: solid 0.4px black;
+  border: solid 0.4px white;
 }
 
 p {

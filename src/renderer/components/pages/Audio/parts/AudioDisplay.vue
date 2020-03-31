@@ -39,15 +39,14 @@ export default {
 <style scoped>
 /* 再生中の曲に関する情報　*/
 .info {
-  height: 220px;
+  height: 200px;
   width: 90%;
   margin: 5px auto;
   text-align: center;
-  border: dotted 1px black;
 }
 
 .info__music {
-  margin: 30px auto;
+  margin: 15px auto;
   line-height: 8px;
 }
 

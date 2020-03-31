@@ -124,7 +124,7 @@ export default {
   margin: 10px auto;
   height: 140px;
   width: 95%;
-  border: groove 1px white;
+  border: groove 1px black;
 }
 
 .controller__seek {

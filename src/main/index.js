@@ -21,7 +21,7 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     'width': 280,
-    'height': 460
+    'height': 470
   })
 
   mainWindow.loadURL(winURL)
