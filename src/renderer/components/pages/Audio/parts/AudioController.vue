@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import audioPlayer from '@/components/js/AudioPlayer.js'
+
 export default {
   name: 'AudioController',
   data () {
@@ -55,12 +57,12 @@ export default {
     seekTime () {
       // ユーザが操作した時のみ適用(再生時間の視覚表示にも使ってるためjs側からの操作を弾く必要がある)
       if (this.preSeekTime !== this.seekTime) {
-        this.$store.dispatch('controlSeek', this.seekTime)
+        audioPlayer.controlSeek(this.seekTime)
       }
     },
     volume () {
       if (this.preVolume !== this.volume) {
-        this.$store.dispatch('controlVolme', this.volume)
+        audioPlayer.controlVolume(this.volume)
       }
     }
   },
@@ -83,28 +85,20 @@ export default {
     this.volume = this.$store.getters.preVolume
   },
   methods: {
-    init () {
-      // 初期化(再生途中で次のトラックに進む可能性)
-      if (this.isPlay) this.stop()
-      this.$store.dispatch('init')
-      this.$store.dispatch('musicData')
-    },
     next () {
-      this.$store.dispatch('next')
-      this.init()
+      audioPlayer.next()
     },
     prev () {
-      this.$store.dispatch('prev')
-      this.init()
+      audioPlayer.prev()
     },
     start () {
-      this.$store.dispatch('start')
+      audioPlayer.start()
     },
     stop () {
-      this.$store.dispatch('stop')
+      audioPlayer.stop()
     },
     loop () {
-      this.$store.dispatch('loop')
+      audioPlayer.loop()
     },
     format (seconds) {
       const minute = seconds !== 0 ? Math.floor(seconds / 60) : 0

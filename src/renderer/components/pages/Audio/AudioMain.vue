@@ -19,6 +19,7 @@
 <script>
 import AudioDisplay from './parts/AudioDisplay'
 import AudioController from './parts/AudioController'
+import audioPlayer from '@/components/js/AudioPlayer.js'
 
 export default {
   name: 'AudioMain',
@@ -49,8 +50,7 @@ export default {
       // 初回読み込みに時間がかかるため実行タイミングを少しずらす
       if (!this.isLoaded) {
         const delay = setTimeout(() => {
-          this.$store.dispatch('musicData')
-          this.$store.dispatch('init')
+          audioPlayer.init()
           clearTimeout(delay)
         }, 1000)
       }
