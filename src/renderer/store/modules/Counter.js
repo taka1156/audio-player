@@ -1,3 +1,4 @@
+let jsmediatags = require('jsmediatags')
 let audio = new Audio()
 
 const state = {
@@ -5,13 +6,21 @@ const state = {
   isPlay: false, // 再生状態の確認
   isLoop: false, // ループの状態
   playList: [], // 登録したファイル一覧
-  seekTime: 0, // 現在のシークバーの現在位置(再生位置)
+  preSeekTime: 0, // 現在のシークバーの現在位置(再生位置)
   seekEndTime: 0, // シークバーの最大値
-  volume: 1
+  preVolume: 1,
+  musicInfo: null
 }
 
 const getters = {
-  isLoaded () {
+  status (state) {
+    return state.musicInfo !== null && typeof state.musicInfo !== 'undefined'
+  },
+  // アートワーク
+  musicInfo (state) {
+    return state.musicInfo
+  },
+  isLoaded (state) {
     return state.playList.length !== 0
   },
   playList (state) {
@@ -24,15 +33,12 @@ const getters = {
   isLoop (state) {
     return state.isLoop
   },
-  volume (state) {
-    return state.volume
+  preVolume (state) {
+    return state.preVolume
   },
   // 曲に関する情報
-  title (state) {
-    return state.playList[state.index].name
-  },
-  seekTime (state) {
-    return Math.floor(state.seekTime)
+  preSeekTime (state) {
+    return Math.floor(state.preSeekTime)
   },
   seekEndTime (state) {
     return Math.floor(state.seekEndTime)
@@ -47,6 +53,10 @@ const getters = {
 }
 
 const mutations = {
+  // 曲の情報
+  setMusicInfo (state, musicInfo) {
+    state.musicInfo = musicInfo
+  },
   // 曲の追加
   setPlayList (state, music) {
     state.playList.push(music)
@@ -56,8 +66,8 @@ const mutations = {
     state.isPlay = !state.isPlay
   },
   // 現在のシーク位置
-  setSeekTime (state, seekTime) {
-    state.seekTime = seekTime
+  setPreSeekTime (state, preSeekTime) {
+    state.preSeekTime = preSeekTime
   },
   // 終わりのシーク位置
   setSeekEndTime (state, seekEndTime) {
@@ -86,8 +96,8 @@ const mutations = {
     state.isLoop = !state.isLoop
   },
   // ボリューム
-  setVolume (state, vol) {
-    state.volume = vol
+  setPreVolume (state, vol) {
+    state.preVolume = vol
   }
 }
 
@@ -95,13 +105,13 @@ const actions = {
   loadFile (context, file) {
     let reader = new FileReader()
     reader.onload = () => {
-      context.commit('setPlayList', {name: file.name, path: reader.result})
+      context.commit('setPlayList', {name: file.name, filepath: file.path, path: reader.result})
     }
     reader.readAsDataURL(file)
   },
   init (context) {
     // シークバーの初期化
-    context.commit('setSeekTime', 0)
+    context.commit('setPreSeekTime', 0)
     // 曲のあるパスをセット(再定義をさけるためAudioは、事前に定義)
     audio.src = context.getters.playList[context.getters.index].path
     // 読み込み
@@ -122,7 +132,7 @@ const actions = {
     audio.play()
     // 再生時間の取得
     audio.addEventListener('timeupdate', () => {
-      context.commit('setSeekTime', audio.currentTime)
+      context.commit('setPreSeekTime', audio.currentTime)
     })
     // 曲の終了
     audio.addEventListener('ended', () => {
@@ -139,12 +149,44 @@ const actions = {
     audio.loop = !audio.loop
   },
   controlVolme (context, vol) {
-    context.commit('setVolume', vol)
+    context.commit('setPreVolume', vol)
     audio.volume = vol
   },
   controlSeek (context, seekTime) {
-    context.commit('setSeekTime', seekTime)
+    context.commit('setPreSeekTime', seekTime)
     audio.currentTime = seekTime
+  },
+  musicData (context) {
+    let albumArtUrl = null
+    new jsmediatags.Reader(context.getters.playList[context.getters.index].filepath)
+      .setTagsToRead(['title', 'artist', 'picture'])
+      .read({
+        onSuccess: function ({tags}) {
+          // 画像の生成
+          if (tags.picture) {
+            const { data, type } = tags.picture
+            const byteArray = new Uint8Array(data)
+            const blob = new Blob([byteArray], { type })
+            albumArtUrl = URL.createObjectURL(blob)
+          }
+          // データをまとめる
+          const musicInfo = {
+            title: tags.title,
+            artist: tags.artist,
+            picture: albumArtUrl !== null ? albumArtUrl : require('@/assets/Noimg.png')
+          }
+          context.commit('setMusicInfo', musicInfo)
+        },
+        onError: function (error) {
+          console.log(':(', error.type, error.info)
+          const musicInfo = {
+            title: context.getters.playList[context.getters.index].name,
+            artist: null,
+            picture: require('@/assets/Noimg.png')
+          }
+          context.commit('setMusicInfo', musicInfo)
+        }
+      })
   }
 }
 

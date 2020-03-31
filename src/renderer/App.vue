@@ -18,7 +18,7 @@ export default {
 
 <style>
   body {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: silver;
     color: #fff;
     -webkit-app-region: drag;
     -webkit-user-select: none;

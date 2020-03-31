@@ -2,10 +2,13 @@
   <div class="AudoDisplay">
     <!--情報の表示-->
     <div class="info">
-      track[{{ index + 1 }}/{{ playlistLength }}]
       <div class="info__music">
-        <p class="info__music--title">{{ title }}</p>
-        <img v-show="isLoop" src="@/assets/ui-icon/loop.svg" class="info__music--icon" />
+        track[{{ index + 1 }}/{{ playlistLength }}]
+        <div v-if="status">
+          <p class="info__music--title">title: {{ musicInfo.title }}</p>
+          <p class="info__music--title">artist: {{ musicInfo.artist }}</p>
+          <img :src="musicInfo.picture" class="info__music--artwork" />
+        </div>
       </div>
     </div>
   </div>
@@ -15,17 +18,17 @@
 export default {
   name: 'AudioDisplay',
   computed: {
-    title () {
-      return this.$store.getters.title
-    },
-    isLoop () {
-      return this.$store.getters.isLoop
+    status () {
+      return this.$store.getters.status
     },
     index () {
       return this.$store.getters.index
     },
     playlistLength () {
       return this.$store.getters.playlistLength
+    },
+    musicInfo () {
+      return this.$store.getters.musicInfo
     }
   }
 }
@@ -34,20 +37,26 @@ export default {
 <style scoped>
 /* 再生中の曲に関する情報　*/
 .info {
-  height: 155px;
+  height: 220px;
   width: 90%;
   margin: 5px auto;
   text-align: center;
-  border: solid 1px black;
+  border: dotted 1px black;
 }
 
 .info__music {
-  margin: 50px auto;
-  line-height: 10px;
+  margin: 28px auto;
+  line-height: 8px;
 }
 
 .info__music--title {
   word-wrap: break-word;
+  font-size: 14px;
+}
+
+.info__music--artwork {
+  height: 50%;
+  width: 50%;
 }
 
 .info__music--icon {
