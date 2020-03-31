@@ -69,14 +69,14 @@ export default {
   margin: 8px auto;
   width: 90%;
   height: 230px;
-  border: solid 0.5px black;
+  border: solid 0.5px white;
 }
 
 /* ファイルの取り込み */
 .fileinput {
   display: block;
   margin: 8px auto;
-  height: 25px;
+  height: 22px;
   width: 90%;
   background-color: gray;
   font-size: 8px;
@@ -90,9 +90,9 @@ export default {
 .spinner {
   width: 100px;
   height: 100px;
-  margin: 55vh auto;
+  margin: 60vh auto;
   border-radius: 100%;
-  background-color: cornflowerblue;
+  background-color: white;
   animation: spinner-anime 2s infinite;
 }
 

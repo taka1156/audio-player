@@ -34,6 +34,6 @@ export default {
 .nav__item {
   display: inline-block;
   width: 22%;
-  border: solid 0.5px black;
+  border: solid 0.5px white;
 }
 </style>

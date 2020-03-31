@@ -3,7 +3,9 @@
     <!--情報の表示-->
     <div class="info">
       <div class="info__music">
-        track[{{ index + 1 }}/{{ playlistLength }}]
+        <p class="info__music--title">
+          track[{{ index + 1 }}/{{ playlistLength }}]
+        </p>
         <div v-if="status">
           <p class="info__music--title">title: {{ musicInfo.title }}</p>
           <p class="info__music--title">artist: {{ musicInfo.artist }}</p>
@@ -45,13 +47,13 @@ export default {
 }
 
 .info__music {
-  margin: 28px auto;
+  margin: 30px auto;
   line-height: 8px;
 }
 
 .info__music--title {
   word-wrap: break-word;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .info__music--artwork {

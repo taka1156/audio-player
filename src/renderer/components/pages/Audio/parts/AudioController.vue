@@ -122,9 +122,9 @@ export default {
 .controller {
   text-align: center;
   margin: 10px auto;
-  height: 130px;
+  height: 140px;
   width: 95%;
-  border: groove 1px black;
+  border: groove 1px white;
 }
 
 .controller__seek {
@@ -150,11 +150,6 @@ export default {
 
 input[type='range'] {
   width: 70%;
-}
-
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  background-color: cornflowerblue;
 }
 
 .controller__btn {
