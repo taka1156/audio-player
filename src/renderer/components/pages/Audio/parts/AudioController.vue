@@ -83,6 +83,7 @@ export default {
       // 初期化(再生途中で次のトラックに進む可能性)
       if (this.isPlay) this.stop()
       this.$store.dispatch('init')
+      this.$store.dispatch('musicData')
     },
     next () {
       this.$store.dispatch('next')
