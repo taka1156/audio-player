@@ -56,8 +56,8 @@ export default {
 }
 
 .info__music--artwork {
-  height: 50%;
-  width: 50%;
+  height: 63%;
+  width: 63%;
 }
 
 .info__music--icon {
