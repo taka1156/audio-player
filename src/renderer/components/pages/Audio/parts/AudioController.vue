@@ -22,7 +22,7 @@
         <img src="@/assets/ui-icon/prev.svg" class="controller__icon--lg" />
       </button>
       <!--再生-->
-      <button class="controller__btn" v-show="!isPlay" @click="start">
+      <button class="controller__btn" v-show="!isPlay" @click="play">
         <img src="@/assets/ui-icon/play.svg" class="controller__icon--lg" />
       </button>
       <!--停止-->
@@ -57,12 +57,12 @@ export default {
     seekTime () {
       // ユーザが操作した時のみ適用(再生時間の視覚表示にも使ってるためjs側からの操作を弾く必要がある)
       if (this.preSeekTime !== this.seekTime) {
-        audioPlayer.controlSeek(this.seekTime)
+        audioPlayer.ctrlSeek(this.seekTime)
       }
     },
     volume () {
       if (this.preVolume !== this.volume) {
-        audioPlayer.controlVolume(this.volume)
+        audioPlayer.ctrlVolume(this.volume)
       }
     }
   },
@@ -91,8 +91,8 @@ export default {
     prev () {
       audioPlayer.prev()
     },
-    start () {
-      audioPlayer.start()
+    play () {
+      audioPlayer.play()
     },
     stop () {
       audioPlayer.stop()

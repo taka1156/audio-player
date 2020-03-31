@@ -116,7 +116,7 @@ const actions = {
     }
     reader.readAsDataURL(file)
   },
-  musicData (context) {
+  getMusicInfo (context) {
     let albumArtUrl = null
     new jsmediatags.Reader(context.getters.playList[context.getters.index].filepath)
       .setTagsToRead(['title', 'artist', 'picture'])
@@ -141,7 +141,7 @@ const actions = {
           console.log(':(', error.type, error.info)
           const musicInfo = {
             title: context.getters.playList[context.getters.index].name,
-            artist: null,
+            artist: '',
             picture: require('@/assets/Noimg.png')
           }
           context.commit('setMusicInfo', musicInfo)
