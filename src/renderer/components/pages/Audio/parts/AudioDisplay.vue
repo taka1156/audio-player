@@ -5,7 +5,8 @@
       <div class="info__music">
         track[{{ index + 1 }}/{{ playlistLength }}]
         <div v-if="status">
-          <p class="info__music--title">{{ musicInfo.title }}</p>
+          <p class="info__music--title">title: {{ musicInfo.title }}</p>
+          <p class="info__music--title">artist: {{ musicInfo.artist }}</p>
           <img :src="musicInfo.picture" class="info__music--artwork" />
         </div>
       </div>
@@ -19,9 +20,6 @@ export default {
   computed: {
     status () {
       return this.$store.getters.status
-    },
-    isLoop () {
-      return this.$store.getters.isLoop
     },
     index () {
       return this.$store.getters.index
@@ -53,12 +51,12 @@ export default {
 
 .info__music--title {
   word-wrap: break-word;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .info__music--artwork {
-  height: 55%;
-  width: 55%;
+  height: 50%;
+  width: 50%;
 }
 
 .info__music--icon {

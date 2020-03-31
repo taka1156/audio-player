@@ -3,7 +3,8 @@
     <div class="controller">
       <!--ループやシャッフルの制御-->
       <button @click="loop" class="controller__btn">
-        <img src="@/assets/ui-icon/loop.svg" class="controller__icon--sm" />
+        <img v-show="!isLoop" src="@/assets/ui-icon/loop.svg" class="controller__icon--sm" />
+        <img v-show="isLoop" src="@/assets/ui-icon/loop-true.svg" class="controller__icon--sm" />
       </button>
       <button class="controller__btn">
         <img src="@/assets/ui-icon/shuffle.svg" class="controller__icon--sm" />
@@ -66,6 +67,9 @@ export default {
   computed: {
     isPlay () {
       return this.$store.getters.isPlay
+    },
+    isLoop () {
+      return this.$store.getters.isLoop
     },
     preSeekTime () {
       this.seekTime = this.$store.getters.preSeekTime
