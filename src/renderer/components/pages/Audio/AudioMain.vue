@@ -49,6 +49,7 @@ export default {
       // 初回読み込みに時間がかかるため実行タイミングを少しずらす
       if (!this.isLoaded) {
         const delay = setTimeout(() => {
+          this.$store.dispatch('musicData')
           this.$store.dispatch('init')
           clearTimeout(delay)
         }, 1000)
@@ -64,10 +65,10 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 50%;
+  bottom: 70%;
   margin: 8px auto;
   width: 90%;
-  height: 170px;
+  height: 230px;
   border: solid 0.5px black;
 }
 
@@ -75,11 +76,10 @@ export default {
 .fileinput {
   display: block;
   margin: 8px auto;
-  height: 30px;
+  height: 25px;
   width: 90%;
-
   background-color: gray;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .fileinput__none {

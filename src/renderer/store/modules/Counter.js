@@ -1,3 +1,4 @@
+let jsmediatags = require('jsmediatags')
 let audio = new Audio()
 
 const state = {
@@ -7,11 +8,19 @@ const state = {
   playList: [], // 登録したファイル一覧
   preSeekTime: 0, // 現在のシークバーの現在位置(再生位置)
   seekEndTime: 0, // シークバーの最大値
-  preVolume: 1
+  preVolume: 1,
+  musicInfo: null
 }
 
 const getters = {
-  isLoaded () {
+  status (state) {
+    return state.musicInfo !== null && typeof state.musicInfo !== 'undefined'
+  },
+  // アートワーク
+  musicInfo (state) {
+    return state.musicInfo
+  },
+  isLoaded (state) {
     return state.playList.length !== 0
   },
   playList (state) {
@@ -28,9 +37,6 @@ const getters = {
     return state.preVolume
   },
   // 曲に関する情報
-  title (state) {
-    return state.playList[state.index].name
-  },
   preSeekTime (state) {
     return Math.floor(state.preSeekTime)
   },
@@ -47,6 +53,10 @@ const getters = {
 }
 
 const mutations = {
+  // 曲の情報
+  setMusicInfo (state, musicInfo) {
+    state.musicInfo = musicInfo
+  },
   // 曲の追加
   setPlayList (state, music) {
     state.playList.push(music)
@@ -95,7 +105,7 @@ const actions = {
   loadFile (context, file) {
     let reader = new FileReader()
     reader.onload = () => {
-      context.commit('setPlayList', {name: file.name, path: reader.result})
+      context.commit('setPlayList', {name: file.name, filepath: file.path, path: reader.result})
     }
     reader.readAsDataURL(file)
   },
@@ -145,6 +155,38 @@ const actions = {
   controlSeek (context, seekTime) {
     context.commit('setPreSeekTime', seekTime)
     audio.currentTime = seekTime
+  },
+  musicData (context) {
+    let albumArtUrl = null
+    new jsmediatags.Reader(context.getters.playList[context.getters.index].filepath)
+      .setTagsToRead(['title', 'artist', 'picture'])
+      .read({
+        onSuccess: function ({tags}) {
+          // 画像の生成
+          if (tags.picture) {
+            const { data, type } = tags.picture
+            const byteArray = new Uint8Array(data)
+            const blob = new Blob([byteArray], { type })
+            albumArtUrl = URL.createObjectURL(blob)
+          }
+          // データをまとめる
+          const musicInfo = {
+            title: tags.title,
+            artist: tags.artist,
+            picture: albumArtUrl !== null ? albumArtUrl : require('@/assets/Noimg.png')
+          }
+          context.commit('setMusicInfo', musicInfo)
+        },
+        onError: function (error) {
+          console.log(':(', error.type, error.info)
+          const musicInfo = {
+            title: context.getters.playList[context.getters.index].name,
+            artist: null,
+            picture: require('@/assets/Noimg.png')
+          }
+          context.commit('setMusicInfo', musicInfo)
+        }
+      })
   }
 }
 
