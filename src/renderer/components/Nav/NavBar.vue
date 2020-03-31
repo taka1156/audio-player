@@ -8,8 +8,8 @@
         <router-link to="/music" class="nav__item">
           <img src="@/assets/nav-icon/music.svg" />
         </router-link>
-        <router-link to="/favo" class="nav__item">
-          <img src="@/assets/nav-icon/favo.svg" />
+        <router-link to="/list" class="nav__item">
+          <img src="@/assets/nav-icon/list.svg" />
         </router-link>
         <router-link to="/setting" class="nav__item">
           <img src="@/assets/nav-icon/setting.svg" />
