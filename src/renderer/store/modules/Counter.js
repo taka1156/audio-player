@@ -91,6 +91,11 @@ const mutations = {
       state.index = INDEX
     }
   },
+  // 添字を直接変える
+  setIndex (state, index) {
+    console.log(index)
+    state.index = index
+  },
   // ループ制御
   stateChangeLoop (state) {
     state.isLoop = !state.isLoop
@@ -187,6 +192,11 @@ const actions = {
           context.commit('setMusicInfo', musicInfo)
         }
       })
+  },
+  changeIndex (context, index) {
+    context.commit('setIndex', index)
+    context.dispatch('init')
+    context.dispatch('musicData')
   }
 }
 

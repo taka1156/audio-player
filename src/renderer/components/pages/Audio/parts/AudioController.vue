@@ -15,7 +15,7 @@
           <ruby>{{ format(preSeekTime) }}</ruby>
           <ruby>{{ format(seekEndTime) }}</ruby>
         </div>
-        <input type="range" v-model="seekTime" min="1" :max="seekEndTime" step="1" />
+        <input type="range" v-model="seekTime" min="0" :max="seekEndTime" step="1" />
       </div>
       <!--トラックを戻す-->
       <button class="controller__btn" @click="prev">
@@ -122,7 +122,7 @@ export default {
 .controller {
   text-align: center;
   margin: 10px auto;
-  height: 130px;
+  height: 140px;
   width: 95%;
   border: groove 1px black;
 }
@@ -150,11 +150,6 @@ export default {
 
 input[type='range'] {
   width: 70%;
-}
-
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  background-color: cornflowerblue;
 }
 
 .controller__btn {

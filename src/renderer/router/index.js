@@ -16,9 +16,9 @@ export default new Router({
       component: require('@/components/pages/Audio/AudioMain').default
     },
     {
-      path: '/favo',
-      name: 'favo',
-      component: require('@/components/pages/Favo/Favo').default
+      path: '/list',
+      name: 'list',
+      component: require('@/components/pages/List/List').default
     },
     {
       path: '/setting',
