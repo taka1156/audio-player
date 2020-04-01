@@ -1,5 +1,5 @@
 <template>
-  <div class="Favo">
+  <div class="List">
     <div class="center">
       <h4>取り込んだ曲</h4>
       <div class="border" />
@@ -16,7 +16,7 @@
 import audioPlayer from '@/components/js/AudioPlayer.js'
 
 export default {
-  name: 'Favo',
+  name: 'List',
   computed: {
     playList () {
       return this.$store.getters.playList
@@ -35,7 +35,7 @@ export default {
 .center {
   margin: 0 auto;
   height: 87vh;
-  width: 95%;
+  width: 100%;
   border: solid 1px white;
 }
 

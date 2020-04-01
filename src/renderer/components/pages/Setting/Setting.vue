@@ -17,7 +17,7 @@ export default {
 .center {
   margin: 0 auto;
   height: 87vh;
-  width: 95%;
+  width: 100%;
   border: solid 1px white;
 }
 
