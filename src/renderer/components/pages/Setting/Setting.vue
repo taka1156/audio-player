@@ -10,21 +10,14 @@
       <toggle-swich :flag="isDisable" @state-change="isDisable = !isDisable">
         コントローラーのみ表示
       </toggle-swich>
-      <toggle-swich :flag="isVisalizer" @state-change="isVisalizer = !isVisalizer">
-        ビジュアライザーの表示
+      <toggle-swich :flag="isAutoPlay" @state-change="isAutoPlay = !isAutoPlay">
+        オートプレイ
       </toggle-swich>
       <toggle-swich :flag="isFile" @state-change="isFile = !isFile">
         ファイルの保存
       </toggle-swich>
-      <div class="content">
-        <label class="toggle-label">UIカラー</label>
-        <select v-model="uiColor" class="input-selecter">
-          <option disabled value="">選択して下さい</option>
-          <option v-for="(color, index) in colorList" :key="index">{{ color }}</option>
-        </select>
-      </div>
       <!--設定の反映、初期化-->
-      <div class="setting__controller">
+      <div class="setting">
         <button @click="saveSetting('保存しました。')">保存</button>
         <button @click="resetSetting">リセット</button>
       </div>
@@ -48,10 +41,8 @@ export default {
     return {
       isFronted: false,
       isDisable: false,
-      isVisalizer: false,
+      isAutoPlay: false,
       isFile: false,
-      colorList: ['red', 'blue', 'gold'],
-      uiColor: '',
       msg: ''
     }
   },
@@ -62,9 +53,8 @@ export default {
       // 初期値を代入
       this.isFronted = SETTING.isFronted
       this.isDisable = SETTING.isDisable
-      this.isVisalizer = SETTING.isVisalizer
+      this.isAutoPlay = SETTING.isAutoPlay
       this.isFile = SETTING.isFile
-      this.uiColor = SETTING.uiColor
     }
   },
   methods: {
@@ -72,16 +62,14 @@ export default {
       const SETTING = {
         isFronted: this.isFronted,
         isDisable: this.isDisable,
-        isVisalizer: this.isVisalizer,
-        isFile: this.isFile,
-        uiColor: this.uiColor
+        isAutoPlay: this.isAutoPlay,
+        isFile: this.isFile
       }
       localStorage.setItem('AudioSetting', JSON.stringify(SETTING))
       this.setMsg(msg)
     },
     resetSetting () {
-      this.isFronted = this.isDisable = this.isVisalizer = this.isFile = false
-      this.uiColor = ''
+      this.isFronted = this.isDisable = this.isAutoPlay = this.isFile = false
       this.saveSetting('初期化しました。')
     },
     setMsg (msg) {
@@ -108,29 +96,7 @@ export default {
   border: solid 0.4px white;
 }
 
-p {
-  line-height: 8px;
-}
-
-.content {
-  display: flex;
-  margin: 5px;
-  justify-content: space-around;
-}
-
-.toggle-label {
-  line-height: 20px;
-  margin: 3px;
-  width: 70%;
-  font-size: 12.2px;
-}
-
-.input-selecter {
-  margin: 3px auto;
-  margin-left: 10%;
-}
-
-.setting__controller {
+.setting {
   margin: 0 auto;
   width: 60%;
   display: flex;
