@@ -1,5 +1,4 @@
 let jsmediatags = require('jsmediatags')
-let audio = new Audio()
 
 const state = {
   index: 0, // プレイリストの添字
@@ -47,7 +46,7 @@ const getters = {
   index (state) {
     return state.index
   },
-  playlistLength () {
+  playlistLength (state) {
     return state.playList.length
   }
 }
@@ -93,7 +92,6 @@ const mutations = {
   },
   // 添字を直接変える
   setIndex (state, index) {
-    console.log(index)
     state.index = index
   },
   // ループ制御
@@ -110,56 +108,13 @@ const actions = {
   loadFile (context, file) {
     let reader = new FileReader()
     reader.onload = () => {
-      context.commit('setPlayList', {name: file.name, filepath: file.path, path: reader.result})
+      context.commit('setPlayList', {
+        name: file.name,
+        filepath: file.path,
+        path: reader.result
+      })
     }
     reader.readAsDataURL(file)
-  },
-  init (context) {
-    // シークバーの初期化
-    context.commit('setPreSeekTime', 0)
-    // 曲のあるパスをセット(再定義をさけるためAudioは、事前に定義)
-    audio.src = context.getters.playList[context.getters.index].path
-    // 読み込み
-    audio.load()
-    // 曲の終わり時間の代入
-    audio.addEventListener('loadedmetadata', () => {
-      context.commit('setSeekEndTime', audio.duration)
-    })
-  },
-  next (context) {
-    context.commit('nextIndex')
-  },
-  prev (context) {
-    context.commit('prevIndex')
-  },
-  start (context) {
-    context.commit('stateChangePlay')
-    audio.play()
-    // 再生時間の取得
-    audio.addEventListener('timeupdate', () => {
-      context.commit('setPreSeekTime', audio.currentTime)
-    })
-    // 曲の終了
-    audio.addEventListener('ended', () => {
-      audio.currentTime = 0
-      context.dispatch('stop')
-    })
-  },
-  stop (context) {
-    audio.pause()
-    context.commit('stateChangePlay')
-  },
-  loop (context) {
-    context.commit('stateChangeLoop')
-    audio.loop = !audio.loop
-  },
-  controlVolme (context, vol) {
-    context.commit('setPreVolume', vol)
-    audio.volume = vol
-  },
-  controlSeek (context, seekTime) {
-    context.commit('setPreSeekTime', seekTime)
-    audio.currentTime = seekTime
   },
   musicData (context) {
     let albumArtUrl = null
@@ -169,9 +124,9 @@ const actions = {
         onSuccess: function ({tags}) {
           // 画像の生成
           if (tags.picture) {
-            const { data, type } = tags.picture
+            const {data, type} = tags.picture
             const byteArray = new Uint8Array(data)
-            const blob = new Blob([byteArray], { type })
+            const blob = new Blob([byteArray], {type})
             albumArtUrl = URL.createObjectURL(blob)
           }
           // データをまとめる
@@ -192,11 +147,6 @@ const actions = {
           context.commit('setMusicInfo', musicInfo)
         }
       })
-  },
-  changeIndex (context, index) {
-    context.commit('setIndex', index)
-    context.dispatch('init')
-    context.dispatch('musicData')
   }
 }
 
