@@ -13,17 +13,8 @@
 
 ## AudioPlayerの使い方
 
-<img width="371" alt="スクリーンショット 2020-03-28 23 16 31" src="https://user-images.githubusercontent.com/47517002/77825357-0eeba980-714c-11ea-9c36-81d1cdc16d4e.png">
+![8450768F-C078-434C-AC1C-ED15766ECF34](https://user-images.githubusercontent.com/47517002/81506168-65ddc480-932f-11ea-8c9c-76d146852c41.png)
 
-<img width="371" alt="スクリーンショット 2020-03-28 23 16 41" src="https://user-images.githubusercontent.com/47517002/77825355-0abf8c00-714c-11ea-8852-dd811706f280.png">
-
-
-|ボタン|機能                |
-|:---:|:-----------------:|
-|`<`  |一つ前のトラックに戻る |
-|`>`  |一つ後のトラックに進む |
-|`▷`  |再生                |
-|`||` |停止                |
 
 ### 未実装
 - [X] 曲の再生 (△)
