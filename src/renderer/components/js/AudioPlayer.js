@@ -11,9 +11,9 @@ export default {
     }
     audio.src = store.getters.playList[store.getters.index].path
     audio.load()
+    store.dispatch('getMusicInfo')
     audio.addEventListener('loadedmetadata', () => {
       store.commit('setSeekEndTime', audio.duration)
-      store.dispatch('musicData')
     })
   },
   next () {
@@ -24,7 +24,7 @@ export default {
     store.commit('prevIndex')
     this.init()
   },
-  start () {
+  play () {
     // 再生状態
     store.commit('stateChangePlay')
     audio.play()
@@ -46,17 +46,17 @@ export default {
     store.commit('stateChangeLoop')
     audio.loop = !audio.loop
   },
-  controlVolume (vol) {
+  ctrlVolume (vol) {
     store.commit('setPreVolume', vol)
     audio.volume = vol
   },
-  controlSeek (seekTime) {
+  ctrlSeek (seekTime) {
     store.commit('setPreSeekTime', seekTime)
     audio.currentTime = seekTime
   },
   changeIndex (index) {
     store.commit('setIndex', index)
-    store.dispatch('musicData', index)
+    store.dispatch('getMusicInfo')
     this.init()
   }
 }

@@ -33,7 +33,7 @@ export default {
 
 .nav__item {
   display: inline-block;
-  width: 22%;
-  border: solid 0.5px white;
+  width: 23%;
+  border: solid 0.05px white;
 }
 </style>
