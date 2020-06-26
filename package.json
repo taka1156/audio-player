@@ -1,7 +1,7 @@
 {
   "name": "audio-player",
   "version": "0.0.1",
-  "author": "taka <taka05061@gamil.com>",
+  "author": "taka <tomo05061@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
   "main": "./dist/electron/main.js",
