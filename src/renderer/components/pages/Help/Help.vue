@@ -9,8 +9,8 @@
         <p>簡単に各ページの紹介をしています</p>
         <li>Music</li>
         <p>曲の再生ページ</p>
-        <li>Favo</li>
-        <p>取り込んだ曲をお気に入りに入れる(開発中)</p>
+        <li>List</li>
+        <p>取り込んだ曲リスト表示</p>
         <li>Setting</li>
         <p>色やビジュアライザーなどの設定(開発中)</p>
       </ul>
@@ -28,7 +28,7 @@ export default {
 .center {
   margin: 0 auto;
   height: 87vh;
-  width: 95%;
+  width: 100%;
   border: solid 1px white;
 }
 
