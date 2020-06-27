@@ -24,8 +24,8 @@ function createWindow () {
     'height': 470,
     x: 1200,
     y: 0,
-    resizable: false,
-    alwaysOnTop: true
+    resizable: true,
+    alwaysOnTop: false
   })
 
   mainWindow.loadURL(winURL)

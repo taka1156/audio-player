@@ -6,7 +6,10 @@
         こちらをクリックまたは、ファイルドラッグで音楽ファイルを入れてください。
         <input type="file" class="fileinput__none" @change="fileChange" multiple />
       </label>
-      <div v-if="!isLoaded" class="spinner"></div>
+      <div v-if="!isLoaded" class="load">
+        <p v-show="playListLen !== 0" class="load__text">{{ playListLen + 1 }}曲目を読み込み中...</p>
+        <div class="load__spinner"></div>
+      </div>
       <div v-else>
         <!--再生中の曲の情報-->
         <audio-display />
@@ -21,6 +24,8 @@ import AudioDisplay from './parts/AudioDisplay'
 import AudioController from './parts/AudioController'
 import audioPlayer from '@/components/js/AudioPlayer.js'
 
+let isFirstTime = true
+
 export default {
   name: 'AudioMain',
   components: {
@@ -30,6 +35,9 @@ export default {
   computed: {
     isLoaded () {
       return this.$store.getters.isLoaded
+    },
+    playListLen () {
+      return this.$store.getters.playList.length
     }
   },
   mounted () {
@@ -39,20 +47,15 @@ export default {
     }
   },
   methods: {
-    fileChange (e) {
+    async fileChange (e) {
       const FILES = e.target.files || e.dataTransfer.files
       if (!FILES.length) {
         return
       }
-      for (let i = 0, max = FILES.length; i < max; i++) {
-        this.$store.dispatch('loadFile', FILES[i])
-      }
-      // 初回読み込みに時間がかかるため実行タイミングを少しずらす
-      if (!this.isLoaded) {
-        const delay = setTimeout(() => {
-          audioPlayer.init()
-          clearTimeout(delay)
-        }, 1000)
+      await this.$store.dispatch('loadFile', FILES)
+      if (isFirstTime) {
+        isFirstTime = false
+        audioPlayer.init()
       }
     }
   }
@@ -81,11 +84,20 @@ export default {
   display: none;
 }
 
+.load {
+  margin: 35vh auto;
+}
+
+.load__text {
+  font-size: 15px;
+  text-align: center;
+}
+
 /* 待機時のスピナー表示　*/
-.spinner {
+.load__spinner {
   width: 100px;
   height: 100px;
-  margin: 35vh auto;
+  margin: 0 auto;
   border-radius: 100%;
   background-color: white;
   animation: spinner-anime 2s infinite;
