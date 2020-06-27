@@ -12,10 +12,10 @@
       <!--再生位置-->
       <div class="controller__seek">
         <div class="controller__seek--info">
-          <ruby>{{ format(preSeekTime) }}</ruby>
-          <ruby>{{ format(seekEndTime) }}</ruby>
+          <ruby>{{ format(seekInfo.now) }}</ruby>
+          <ruby>{{ format(seekInfo.end) }}</ruby>
         </div>
-        <input type="range" v-model="seekTime" min="0" :max="seekEndTime" step="1" />
+        <input type="range" v-model="seekTime" min="0" :max="seekInfo.end" step="1" />
       </div>
       <!--トラックを戻す-->
       <button class="controller__btn" @click="prev">
@@ -56,7 +56,7 @@ export default {
   watch: {
     seekTime () {
       // ユーザが操作した時のみ適用(再生時間の視覚表示にも使ってるためjs側からの操作を弾く必要がある)
-      if (this.preSeekTime !== this.seekTime) {
+      if (this.seekInfo.now !== this.seekTime) {
         audioPlayer.ctrlSeek(this.seekTime)
       }
     },
@@ -73,12 +73,10 @@ export default {
     isLoop () {
       return this.$store.getters.isLoop
     },
-    preSeekTime () {
-      this.seekTime = this.$store.getters.preSeekTime
-      return this.$store.getters.preSeekTime
-    },
-    seekEndTime () {
-      return this.$store.getters.seekEndTime
+    seekInfo () {
+      const {now, end} = this.$store.getters.seekInfo
+      this.seekTime = now
+      return { now, end }
     }
   },
   mounted () {

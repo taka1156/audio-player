@@ -1,29 +1,25 @@
-let jsmediatags = require('jsmediatags')
+import { loadSong } from '@/components/js/GenSong.js'
 
 const state = {
-  index: 0, // プレイリストの添字
+  isLoaded: false, // 読み込み状態
   isPlay: false, // 再生状態の確認
   isLoop: false, // ループの状態
   playList: [], // 登録したファイル一覧
+  index: 0, // プレイリストの添字
   preSeekTime: 0, // 現在のシークバーの現在位置(再生位置)
   seekEndTime: 0, // シークバーの最大値
-  preVolume: 1,
-  musicInfo: null
+  preVolume: 1
 }
 
 const getters = {
-  status (state) {
-    return state.musicInfo !== null && typeof state.musicInfo !== 'undefined'
-  },
-  // アートワーク
-  musicInfo (state) {
-    return state.musicInfo
-  },
   isLoaded (state) {
-    return state.playList.length !== 0
+    return state.isLoaded
   },
   playList (state) {
     return state.playList
+  },
+  playedSong (state) {
+    return state.playList[state.index]
   },
   // オーディオの状態
   isPlay (state) {
@@ -35,30 +31,29 @@ const getters = {
   preVolume (state) {
     return state.preVolume
   },
-  // 曲に関する情報
-  preSeekTime (state) {
-    return Math.floor(state.preSeekTime)
+  // 再生時間の情報
+  seekInfo (state) {
+    return {
+      now: Math.floor(state.preSeekTime), // 現在の再生時間
+      end: Math.floor(state.seekEndTime) // 終わりの再生時間
+    }
   },
-  seekEndTime (state) {
-    return Math.floor(state.seekEndTime)
-  },
-  // トラック情報
-  index (state) {
-    return state.index
-  },
-  playlistLength (state) {
-    return state.playList.length
+  // トラックの情報
+  trackInfo (state) {
+    return {
+      now: state.index, // 現在のトラック
+      max: state.playList.length // 最大のトラック
+    }
   }
 }
 
 const mutations = {
-  // 曲の情報
-  setMusicInfo (state, musicInfo) {
-    state.musicInfo = musicInfo
-  },
   // 曲の追加
-  setPlayList (state, music) {
-    state.playList.push(music)
+  addSong (state, song) {
+    state.playList.push(song)
+  },
+  stateChangeLoad (state) {
+    state.isLoaded = true
   },
   // 再生、停止
   stateChangePlay (state) {
@@ -74,21 +69,13 @@ const mutations = {
   },
   // 添字を進める
   nextIndex (state) {
-    const INDEX = state.index + 1
-    if (INDEX === state.playList.length) {
-      state.index = 0
-    } else {
-      state.index = INDEX
-    }
+    const INDEX = Math.min(state.index + 1, state.playList.length)
+    state.index = INDEX === state.playList.length ? 0 : INDEX
   },
   // 添字を戻す
   prevIndex (state) {
-    const INDEX = state.index - 1
-    if (INDEX === -1) {
-      state.index = state.playList.length - 1
-    } else {
-      state.index = INDEX
-    }
+    const INDEX = Math.max(state.index - 1, -1)
+    state.index = INDEX === -1 ? state.playList.length - 1 : INDEX
   },
   // 添字を直接変える
   setIndex (state, index) {
@@ -105,48 +92,13 @@ const mutations = {
 }
 
 const actions = {
-  loadFile (context, file) {
-    let reader = new FileReader()
-    reader.onload = () => {
-      context.commit('setPlayList', {
-        name: file.name,
-        filepath: file.path,
-        path: reader.result
-      })
+  async loadFile (context, files) {
+    for (let i = 0; i < files.length; i++) {
+      const SONG = await loadSong(files[i])
+      console.log(SONG)
+      context.commit('addSong', SONG)
     }
-    reader.readAsDataURL(file)
-  },
-  getMusicInfo (context) {
-    let albumArtUrl = null
-    new jsmediatags.Reader(context.getters.playList[context.getters.index].filepath)
-      .setTagsToRead(['title', 'artist', 'picture'])
-      .read({
-        onSuccess: function ({tags}) {
-          // 画像の生成
-          if (tags.picture) {
-            const {data, type} = tags.picture
-            const byteArray = new Uint8Array(data)
-            const blob = new Blob([byteArray], {type})
-            albumArtUrl = URL.createObjectURL(blob)
-          }
-          // データをまとめる
-          const musicInfo = {
-            title: tags.title,
-            artist: tags.artist,
-            picture: albumArtUrl !== null ? albumArtUrl : require('@/assets/Noimg.png')
-          }
-          context.commit('setMusicInfo', musicInfo)
-        },
-        onError: function (error) {
-          console.log(':(', error.type, error.info)
-          const musicInfo = {
-            title: context.getters.playList[context.getters.index].name,
-            artist: '',
-            picture: require('@/assets/Noimg.png')
-          }
-          context.commit('setMusicInfo', musicInfo)
-        }
-      })
+    context.commit('stateChangeLoad')
   }
 }
 
