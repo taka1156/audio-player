@@ -9,9 +9,8 @@ export default {
     if (store.getters.isPlay) {
       this.stop()
     }
-    audio.src = store.getters.playList[store.getters.index].path
+    audio.src = store.getters.playedSong.path
     audio.load()
-    store.dispatch('getMusicInfo')
     audio.addEventListener('loadedmetadata', () => {
       store.commit('setSeekEndTime', audio.duration)
     })
@@ -56,7 +55,6 @@ export default {
   },
   changeIndex (index) {
     store.commit('setIndex', index)
-    store.dispatch('getMusicInfo')
     this.init()
   }
 }

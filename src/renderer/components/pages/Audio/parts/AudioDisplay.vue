@@ -4,12 +4,12 @@
     <div class="info">
       <div class="info__music">
         <p class="info__music--text">
-          track[{{ index + 1 }}/{{ playlistLength }}]
+          track[{{ trackInfo.now + 1 }}/{{ trackInfo.max }}]
         </p>
-        <div v-if="status">
-          <p class="info__music--text">title: {{ musicInfo.title }}</p>
-          <p class="iinfo__music--text">artist: {{ musicInfo.artist }}</p>
-          <img :src="musicInfo.picture" class="info__music--artwork" />
+        <div v-if="isLoaded">
+          <p class="info__music--text">title: {{ playedSong.title }}</p>
+          <p class="iinfo__music--text">artist: {{ playedSong.artist }}</p>
+          <img :src="playedSong.picture" class="info__music--artwork" />
         </div>
       </div>
     </div>
@@ -20,17 +20,14 @@
 export default {
   name: 'AudioDisplay',
   computed: {
-    status () {
-      return this.$store.getters.status
+    isLoaded () {
+      return this.$store.getters.isLoaded
     },
-    index () {
-      return this.$store.getters.index
+    trackInfo () {
+      return this.$store.getters.trackInfo
     },
-    playlistLength () {
-      return this.$store.getters.playlistLength
-    },
-    musicInfo () {
-      return this.$store.getters.musicInfo
+    playedSong () {
+      return this.$store.getters.playedSong
     }
   }
 }
