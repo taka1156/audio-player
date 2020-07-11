@@ -15,7 +15,9 @@
           <ruby>{{ format(seekInfo.now) }}</ruby>
           <ruby>{{ format(seekInfo.end) }}</ruby>
         </div>
-        <input type="range" v-model="seekTime" min="0" :max="seekInfo.end" step="1" />
+        <div class="flame">
+          <input type="range" v-model="seekTime" min="0" :max="seekInfo.end" step="1" />
+        </div>
       </div>
       <!--トラックを戻す-->
       <button class="controller__btn" @click="prev">
@@ -110,6 +112,15 @@ export default {
 </script>
 
 <style scoped>
+/* デフォルトcss無効化 */
+button:focus {
+  outline: none;
+}
+
+input[type="range"] {
+  outline: none;
+}
+
 /* オーディオ プレイヤーのコントローラー　*/
 .controller {
   text-align: center;
@@ -121,6 +132,31 @@ export default {
 
 .controller__seek {
   text-align: center;
+}
+
+/* 時間表示(シークバー) */
+.flame input[type="range"] {
+  -webkit-appearance: none;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  height: 5px;
+  background-color: gray;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.flame ::-webkit-slider-runnable-track {
+  border-radius: 10px;
+}
+
+.flame ::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 5px;
+  width: 5px;
+  background-color: white;
+  border-radius: 100%;
+  box-shadow: -100vw 0 0 99vw white;
 }
 
 .controller__seek--info {
